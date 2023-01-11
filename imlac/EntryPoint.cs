@@ -26,8 +26,8 @@ namespace imlac
         {
             _startupArgs = args;
 
-            _console = new SDLConsole(0.5f);
             _imlacSystem = new ImlacSystem();
+            _console = new SDLConsole(_imlacSystem, 0.5f);
             _imlacSystem.AttachConsole(_console);
             _imlacSystem.Reset();
          

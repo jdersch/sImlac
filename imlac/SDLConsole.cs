@@ -43,12 +43,15 @@ namespace imlac
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool SetProcessDPIAware();
 
-        public SDLConsole(float scaleFactor)
+        private ImlacSystem _system;
+        public SDLConsole(ImlacSystem system, float scaleFactor)
         {
             if (scaleFactor <= 0)
             {
                 throw new ArgumentOutOfRangeException("scaleFactor");
             }
+
+            _system = system;
 
             _scaleFactor = scaleFactor;
             _throttleFramerate = true;
@@ -638,6 +641,19 @@ namespace imlac
             startY = (int)(startY *_scaleFactor - _yOffset);
             endX = (int)(endX * _scaleFactor + _xOffset);
             endY = (int)(endY * _scaleFactor - _yOffset);
+
+            var state = SDL_GetMouseState(out var x, out var y);
+            if ((state & SDL_BUTTON_LEFT) != 0 && _system.DisplayProcessor.LightPenSensitized)
+            {
+                float screenX = x;
+                float screenY = y;
+                screenX -= startX;
+                screenY -= startY;
+                if (Math.Sqrt(screenX * screenX + screenY * screenY) < 7)
+                {
+                    _system.DisplayProcessor.LightPenStatus = true;
+                }
+            }
 
             _lock.EnterWriteLock();
 

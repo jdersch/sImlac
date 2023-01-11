@@ -155,6 +155,23 @@ namespace imlac
             }
         }
 
+        public bool LightPenSensitized { get; set; }
+
+        public bool LightPenStatus
+        {
+            get
+            {
+                if (_penStrike && _dtStack.Count > 0)
+                {
+                    return false;
+                }
+                return _penStrike;
+            }
+            set => _penStrike = value;
+        }
+
+        public ushort LPR { get; set; }
+
         public int Y
         {
             get { return _y; }

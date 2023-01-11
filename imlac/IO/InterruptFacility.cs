@@ -81,6 +81,13 @@ namespace imlac.IO
                 {
                     // PDS-1:
 
+                    // bit 15: Light Pen
+                    if (_system.DisplayProcessor.LightPenStatus)
+                    {
+                        _system.DisplayProcessor.LPR = _system.DisplayProcessor.PC;
+                        _interruptStatus |= 0x0001;
+                    }
+
                     // bit 14: 40 cycle sync
                     if (_system.DisplayProcessor.FrameLatch && 
                         _system.DisplayProcessor.DisplayHalted)
